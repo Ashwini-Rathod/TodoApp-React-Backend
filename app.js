@@ -12,6 +12,11 @@ const userRoutes = require("./Routes/userRoutes");
 const taskRoutes = require("./Routes/taskRoutes");
 const { protectRoute } = require("./middlewares/protectRoute");
 
+app.get("/", (req,res)=>{
+    res.json({
+        message: "There is nothing on this page",
+    })
+})
 app.use("/users", userRoutes);
 app.use("/todolist", protectRoute, taskRoutes);
 
