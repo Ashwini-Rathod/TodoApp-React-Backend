@@ -26,7 +26,7 @@ const protectRoute = async (req, res, next)=>{
     );
   }
   try{
-    let  currentUser = await User.findOne({email: decoded.email});
+    let  currentUser = await User.findOne({username : decoded.username});
     if (!currentUser) {
       return sendError(
         new AppError(401, "Unsuccesssul", "Please login or signup"),

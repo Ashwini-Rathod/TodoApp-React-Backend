@@ -1,9 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const {getAllTasks, createTask, getTaskById, updateTask, deleteTask} = require("../controllers/taskControllers");
-const { verifyPostRequest } = require("../middlewares/taskMiddlewares");
+const {
+  getAllTasks,
+  createTask,
+  getTaskById,
+  updateTask,
+  deleteTask,
+} = require("../controllers/taskControllers");
 
-router.route("/tasks").get(getAllTasks).post(verifyPostRequest,createTask);
-router.route("/tasks/:taskId").get(getTaskById).patch(updateTask).delete(deleteTask);
+const {
+  verifyPostRequest,
+  verfiyTaskName,
+} = require("../middlewares/taskMiddlewares");
+
+router
+  .route("/tasks")
+  .get(getAllTasks)
+  .post(verifyPostRequest, verfiyTaskName, createTask);
+  
+router
+  .route("/tasks/:taskId")
+  .get(getTaskById)
+  .patch(updateTask)
+  .delete(deleteTask);
 
 module.exports = router;
