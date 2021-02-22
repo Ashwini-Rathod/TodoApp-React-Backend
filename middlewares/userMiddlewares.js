@@ -1,7 +1,6 @@
 const User = require("../models/userSchema");
 const sendError = require("../helper/sendError");
 const AppError = require("../helper/appErrorClass");
-const sendResponse = require("../helper/sendResponse");
 
 const isUserRegistered = async (req, res, next) =>{
     try{

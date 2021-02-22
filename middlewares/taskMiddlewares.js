@@ -1,6 +1,5 @@
 const sendError = require("../helper/sendError");
 const AppError = require("../helper/appErrorClass");
-const sendResponse = require("../helper/sendResponse");
 
 const verifyPostRequest = (req, res, next)=>{
     const requiredProperties = ["taskName"];

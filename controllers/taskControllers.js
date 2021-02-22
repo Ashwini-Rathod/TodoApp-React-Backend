@@ -1,4 +1,3 @@
-//crud operations on todo...
 const Task = require("../models/taskSchema");
 const sendError = require("../helper/sendError");
 const AppError = require("../helper/appErrorClass");
@@ -20,11 +19,9 @@ const getAllTasks = async (req, res, next)=>{
             if(flag){
                 const tasks = await Task.find(mongoFilter);
                 sendResponse(200, "Successful", [tasks], req, res);
-                console.log("testing");
             }
             else{
                 sendResponse(200, "Successful", [], req, res);
-                console.log(false);
             }
         }
         else{
@@ -36,14 +33,11 @@ const getAllTasks = async (req, res, next)=>{
     }
 }
 const createTask = async (req, res, next)=>{
-    console.log("CurrentUser:" ,req.currentUser);
     let newTask = new Task({user: req.currentUser._id, taskName: req.body.taskName});
-    // console.log("New Task: " , newTask);
     try{
         const task = await newTask.save();
         sendResponse(200, "Successful", [task], req, res);
     }catch(err){
-        console.log(err);
         return sendError(new AppError(401, "Unsuccessful", "Internal Error"), req, res);
     }
 }
@@ -57,16 +51,21 @@ const getTaskById = async (req, res, next)=>{
 }
 const updateTask = async(req, res, next)=>{
     try{
-        if(req.body.status){
-            let task = await Task.updateOne({taskId: req.params.taskId, user: req.currentUser._id}, {$set: {status: req.body.status}});
-            sendResponse(200, "Successful", [task], req, res)  
+        let taskFound = await Task.find({taskId: req.params.taskId, user: req.currentUser._id});
+        if(taskFound.status === "Not started"){
+            await Task.findOneAndUpdate({taskId: req.params.taskId, user: req.currentUser._id}, {status: "Completed"}, { useFindAndModify: false});
+            let tasks = await Task.find({user: req.currentUser._id});
+            sendResponse(200, "Successful", tasks, req, res)
         }
         else{
-            return sendError(new AppError(401, "Unsuccessful", "Invalid request"), req, res);
+            await Task.findOneAndUpdate({taskId: req.params.taskId, user: req.currentUser._id}, {status: "Not started"}, { useFindAndModify: false});
+            let tasks = await Task.find( {user: req.currentUser._id});
+            sendResponse(200, "Successful", tasks, req, res);
         }
+        
     }
     catch(err){
-        return sendError(new AppError(401, "Unsuccessful", "Internal Error"), req, res);
+        return sendError(new AppError(401, "Unsuccessful", "Invalid request"), req, res);
     }
 }
 const deleteTask = async (req, res, next)=>{

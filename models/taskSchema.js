@@ -1,12 +1,9 @@
-//mongoose schema
-// const uniqid = require("uniqid");
 const faker = require("faker");
 const mongoose = require("mongoose");
 const taskSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        // ref: "users"
     },
     taskId: {
         type: String,
@@ -16,7 +13,6 @@ const taskSchema = new mongoose.Schema({
         type: String,
         validate:{
             validator : function (taskName){
-                // console.log("this is task validator", this);
                 return this.taskName.trim().length;
             },
         },
@@ -39,10 +35,6 @@ const taskSchema = new mongoose.Schema({
         default: undefined,
     },
 })
-
-// taskSchema.virtual('timeTaken', function(){
-//     return (completedAt - startedAt);
-// })
 
 const Task = mongoose.model("Task", taskSchema);
 module.exports = Task;
