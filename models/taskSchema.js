@@ -1,5 +1,6 @@
 //mongoose schema
-const uniqid = require("uniqid");
+// const uniqid = require("uniqid");
+const faker = require("faker");
 const mongoose = require("mongoose");
 const taskSchema = new mongoose.Schema({
     user: {
@@ -9,7 +10,7 @@ const taskSchema = new mongoose.Schema({
     },
     taskId: {
         type: String,
-        default: uniqid(),
+        default: faker.random.uuid,
     },
     taskName: {
         type: String,
