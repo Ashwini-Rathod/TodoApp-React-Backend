@@ -77,6 +77,32 @@ const updateTask = async (req, res, next) => {
     );
   }
 };
+
+const editTask = async(req, res, next) => {
+  try{
+    // let taskFound = await Task.find({
+    //   taskId: req.params.taskId,
+    //   user: req.currentUser._id,
+    // });
+    // console.log(taskFound);
+    await Task.findOneAndUpdate(
+      { taskId: req.params.taskId, user: req.currentUser._id },
+      { taskName: req.body.taskName },
+      { useFindAndModify: false }
+    );
+    let tasks = await Task.find({ user: req.currentUser._id });
+    sendResponse(200, "Successful", tasks, req, res);
+  }
+  catch(err){
+    console.log(err);
+    return sendError(
+      new AppError(401, "Unsuccessful", "Internal Error"),
+      req,
+      res
+    );
+  }
+}
+
 const deleteTask = async (req, res, next) => {
   try {
     let task = await Task.deleteOne({
@@ -96,5 +122,6 @@ module.exports.getAllTasks = getAllTasks;
 module.exports.createTask = createTask;
 module.exports.getTaskById = getTaskById;
 module.exports.updateTask = updateTask;
+module.exports.editTask = editTask;
 module.exports.deleteTask = deleteTask;
 

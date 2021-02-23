@@ -5,6 +5,7 @@ const {
   createTask,
   getTaskById,
   updateTask,
+  editTask,
   deleteTask,
 } = require("../controllers/taskControllers");
 
@@ -22,6 +23,7 @@ router
   .route("/tasks/:taskId")
   .get(getTaskById)
   .patch(updateTask)
+  .put(verfiyTaskName,editTask)
   .delete(deleteTask);
 
 module.exports = router;
